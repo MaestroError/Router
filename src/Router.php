@@ -303,12 +303,23 @@ class Router {
         $parameters = [];
         $prevSegment = [];
         $count = count($array);
-        $i = 1;
+
         $reversedSegments = array_reverse($array);
+
+        // if empty route
+        if($count == 0) {
+            // Home route
+            $reversedSegments = ["_H"];
+            $count = 1;
+        }
+        
+        $i = 1;
         $routes = [];
         $OPTparams = 0;
         foreach ($reversedSegments as $segment) {
             $currentSegment = [];
+            $segment = (string)$segment;
+            // echo $segment."<br>";
             if($i == 1) {
                 $prevSegment["_methods"] = $methods;
                 // $prevSegment["_action"]["a".$count] = $action;
@@ -346,7 +357,7 @@ class Router {
                 }
             } else {
                 
-                $currentSegment[$segment] = $prevSegment;
+                $currentSegment["HS_".$segment] = $prevSegment;
                 
                 $prevSegment = $currentSegment;
             }
@@ -375,6 +386,14 @@ class Router {
     private function findMatch() {
         $array = array_filter(explode('/', $this->currentUri), 'strlen');
         $count = count($array);
+
+        // if empty route
+        if($count == 0) {
+            // Home route
+            $array = ["_H"];
+            $count = 1;
+        }
+
         $act = true;
         $exc = false;
         $action = true;
@@ -385,8 +404,9 @@ class Router {
 
         foreach ($array as $segment) {
             $coord = $this::$abc[$abc].$count;
-            if(isset($currentSegment[$segment])) { 
-                $currentSegment = $currentSegment[$segment];
+            var_dump($coord);
+            if(isset($currentSegment["HS_".$segment])) { 
+                $currentSegment = $currentSegment["HS_".$segment];
                 // set parameters which might to be empty
                 if(isset($currentSegment["_EMPTYparameter"][$coord])) {
                     foreach ($currentSegment["_EMPTYparameter"][$coord] as $param) {
@@ -529,6 +549,7 @@ class Router {
 
     private function checkCurrentAction() {
         $action = $this->findMatch();
+        // var_dump($action);
         $ext = false;
         if(is_callable($action)) {
             // if action is ready to use callable

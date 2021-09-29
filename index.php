@@ -43,6 +43,13 @@ $router::POST("post/:ident", "testFunction2")->withRoute()->withRequest(); // ->
 // string type functions
 
 
+// $router::GET("", [testController::class, "test"]); 
+$router::GET("/", [testController::class, "test"]); 
+
+echo "<pre>";
+print_r($router);
+echo "</pre>";
+
 // Run. last point of router. (can be called in any other file)
 $router->run();
 
