@@ -171,7 +171,9 @@ class Router {
 
             // set query parameters
             if(!$this->catchGET()) {
-                $this->query = $this->resolveQueryString($request[1]);
+                if(isset($request[1])) {
+                    $this->query = $this->resolveQueryString($request[1]);
+                }
             }
 
             if (isset($_SERVER['REQUEST_METHOD'])) {
@@ -202,13 +204,17 @@ class Router {
             $query = new \stdClass();
             foreach($ar as $i) {
                 $i = explode('=', $i);
-                $query->{$i[0]} = $i[1];
+                if(isset($i[1])) {
+                    $query->{$i[0]} = $i[1];
+                }
             }
         } else {
             $query = [];
             foreach($ar as $i) {
                 $i = explode('=', $i);
-                $query[$i[0]] = $i[1];
+                if(isset($i[1])) {
+                    $query[$i[0]] = $i[1];
+                }
             }
         }
         return $query;
