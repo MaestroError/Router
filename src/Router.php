@@ -337,6 +337,7 @@ class Router {
                     for ($it=0; $it < $i; $it++) { 
                         // echo $this::$abc[$i-$it].$count-$it ."-". $param;
                         $prevSegment["_OPTparameter"][$this::$abc[$i-$it].$count-$it] = $param;
+                        $OPTparams++;
                     }
 
                     // where optional parameters could be empty
@@ -350,7 +351,7 @@ class Router {
                 } else {
                     $prevSegment["_parameter"][$this::$abc[$i].$count] = $param;
                     if($OPTparams > 0) {
-                        for ($it=1; $it <= $OPTparams; $it++) { 
+                        for ($it=1; $it <= $OPTparams-1; $it++) { 
                             $prevSegment["_parameter"][$this::$abc[$i-$it].$count-$it] = $param;
                         }
                     }
@@ -404,6 +405,8 @@ class Router {
 
         foreach ($array as $segment) {
             $coord = $this::$abc[$abc].$count;
+            // var_dump($coord);
+            
             // var_dump($coord);
             if(isset($currentSegment["HS_".$segment])) { 
                 $currentSegment = $currentSegment["HS_".$segment];
@@ -534,6 +537,7 @@ class Router {
         }
 
         $newParams = [];
+        // var_dump($params);
         foreach ($args as $key) {
             if(isset($params[$key])) {
                 $newParams[$key] = $params[$key];
