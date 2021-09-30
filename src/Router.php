@@ -404,7 +404,7 @@ class Router {
 
         foreach ($array as $segment) {
             $coord = $this::$abc[$abc].$count;
-            var_dump($coord);
+            // var_dump($coord);
             if(isset($currentSegment["HS_".$segment])) { 
                 $currentSegment = $currentSegment["HS_".$segment];
                 // set parameters which might to be empty
