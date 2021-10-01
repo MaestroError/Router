@@ -248,7 +248,11 @@ class Router {
     private function catchFILES() {
         if(!isset($_FILES)) { return false; }
         if(empty($_FILES)) { return false; }
-        $filesArray = $this->reArrayFiles($_FILES);
+
+        foreach ($_FILES as $key => $arr) {
+            $filesArray[$key] = $this->reArrayFiles($arr);
+        }
+
         if($this->withObjects) {
             $this->files = $this->getObjectFromArray($filesArray);
         } else {
@@ -260,18 +264,21 @@ class Router {
     // For Traits
     private function reArrayFiles($files){
         $file_ary = array();
-
         if (!empty($files['name'][0])) {
-        if (is_array($files['name'])) {
-            $file_count = count($files['name']);
-        } else {
-            $file_count = 1;
-        }
+            if (is_array($files['name'])) {
+                $file_count = count($files['name']);
+            } else {
+                $file_count = 1;
+            }
             $file_keys = array_keys($files);
 
             for ($i=0; $i<$file_count; $i++) {
                 foreach ($file_keys as $key) {
-                    $file_ary[$i][$key] = $files[$key][$i];
+                    if(is_array($files[$key])) {
+                        $file_ary[$i][$key] = $files[$key][$i];
+                    } else {
+                        $file_ary[$i][$key] = $files[$key];
+                    }
                 }
             }
         }
